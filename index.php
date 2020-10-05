@@ -1,5 +1,10 @@
 <?php
 
+ini_set('display_errors','1');
+ini_set('display_startup_errors','1');
+ini_set('error_reporting', E_ALL); 
+
+
 if(file_exists("clientes.json")){
 
     //Leer el archivo
@@ -43,6 +48,7 @@ if($_POST){
 }
 
 
+
 ?>
 
 
@@ -73,19 +79,19 @@ if($_POST){
                 <form action="" method = "POST" class = "form" enctype = "multipart/form-data">
                 
                     <h5>DNI:</h5>
-                    <input class = "form-control" type="number" name = "nbDNI" id = "nbDNI">
+                    <input class = "form-control" type="number" name = "nbDNI" id = "nbDNI" required value = "<?php echo isset($_GET["id"]) && isset($aClientes[$_GET["id"]])? $aClientes[$_GET["id"]]["dni"] : "" ?>">
 
                     <h5 class = "mt-2 ">Nombre:</h5>
-                    <input class = "form-control" type="text" name = "txtNombre" id = "txtNombre">
+                    <input class = "form-control" type="text" name = "txtNombre" id = "txtNombre" required value = "<?php echo isset($_GET["id"]) && isset($aClientes[$_GET["id"]])? $aClientes[$_GET["id"]]["nombre"] : "" ?>">
 
                     <h5 class = "mt-2 ">Teléfono:</h5>
-                    <input  class = "form-control"type="tel" name = "nbTel" id = "nbTel">
+                    <input  class = "form-control"type="tel" name = "nbTel" id = "nbTel" required value = "<?php echo isset($_GET["id"]) && isset($aClientes[$_GET["id"]])? $aClientes[$_GET["id"]]["tel"] : "" ?>">
 
                     <h5 class = "mt-2 ">Correo:</h5>
-                    <input class = "form-control" type="email" name = "txtCorreo" id = "txtCorreo">
+                    <input class = "form-control" type="email" name = "txtCorreo" id = "txtCorreo" required value = "<?php echo isset($_GET["id"]) && isset($aClientes[$_GET["id"]])? $aClientes[$_GET["id"]]["correo"] : "" ?>">
                     
                     <h5 class = "mt-2">Archivo adjunto:</h5>
-                    <input class = "d-block" type="file" name = "archivo" id = "archivo">
+                    <input class = "d-block" type="file" name = "archivo" id = "archivo" required>
 
                     <button class = "mt-3 btn btn-info" type = "submit">Guardar<i class="fas fa-save ml-2"></i></i></button>
                 
@@ -128,15 +134,15 @@ if($_POST){
                         
                     
 
-                    <?php foreach($aClientes as $cliente) { ?>
+                    <?php foreach($aClientes as $key => $cliente) { ?>
 
                         <tr>
                             <td> <img class = "img-thumbnail" src="archivos/<?php echo $cliente["imagen"]; ?>" alt=""> </td>
                             <td> <?php echo $cliente["dni"]; ?> </td>
                             <td> <?php echo strtoupper($cliente["nombre"]); ?> </td>
                             <td> <?php echo $cliente["correo"]; ?> </td>
-                            <td> <button class = "btn btn-sm btn-secondary"><i class="fas fa-edit"></i></button> </td>
-                            <td> <button class = "btn btn-sm btn-danger"><i class='fas fa-trash'></button></td>
+                            <td> <a href = "index.php?id=<?php echo $key ?>" class = "btn btn-sm btn-secondary"><i class="fas fa-edit"></i></a> </td>
+                            <td> <a href = "index.php?id=<?php echo $key ?>&do=eliminar" class = "btn btn-sm btn-danger"><i class='fas fa-trash'></a></td>
                         </tr>
 
                     <?php } ?>    
@@ -146,7 +152,7 @@ if($_POST){
             
             <div class="btn-container align-items-right">
             
-                <button class ="btn btn-success rounded-circle"><i class="fas fa-plus"></i></button>
+                <a href="index.php" class ="btn btn-success rounded-circle"><i class="fas fa-plus"></i></a>
             
             </div>
 
