@@ -19,7 +19,19 @@ if(file_exists("clientes.json")){
     $aClientes = array();
 }
 
+//Borrar
+if (isset($_GET["id"]) && $_GET["id"] >= 0 && isset($_GET["do"]) && $_GET["do"] == "eliminar"){
+    //Borrar imagen
+    
+    if (file_exists("archivos/" . $aClientes[$_GET["id"]]["imagen"])){
+        unlink("archivos/". $aClientes[$_GET["id"]]["imagen"] );
+    }
+    
+    unset($aClientes[$_GET["id"]]);
+    file_put_contents("clientes.json", json_encode($aClientes));
 
+    header("Location: index.php");
+}
 
 if($_POST){
     
@@ -27,6 +39,7 @@ if($_POST){
     $dni = $_POST["nbDNI"];
     $tel = $_POST["nbTel"];
     $correo = $_POST["txtCorreo"];
+    $nombreImagen = "";
 
 
     if($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) {
@@ -36,14 +49,28 @@ if($_POST){
         $extension = pathinfo($nombreArchivo, PATHINFO_EXTENSION);
         $nombreImagen = $nombreAleatorio . "." . $extension;
         move_uploaded_file($archivo_temp, "archivos/$nombreImagen");
+
+    } 
+
+    if(isset($nombreImagen) && $nombreImagen != "" && isset($_GET["id"]) && $aClientes[$_GET["id"]]["imagen"] != ""){
+        unlink("archivos/" . $aClientes[$_GET['id']]['imagen']);
+    }
+
+    if($nombreImagen == ""){
+        $nombreImagen = $aClientes[$_GET["id"]]["imagen"];
     }
 
 
 
-    $aClientes[] = array("nombre" => $nombre, "dni" => $dni, "tel" => $tel, "correo" => $correo, "imagen" => $nombreImagen);
+    if (isset($_GET["id"]) && $_GET["id"] >= 0){
+        //Actualizar
+        $aClientes[$_GET["id"]] = array("nombre" => $nombre, "dni" => $dni, "tel" => $tel, "correo" => $correo, "imagen" => $nombreImagen);
+    } else {
+        //Nuevo
+        $aClientes[] = array("nombre" => $nombre, "dni" => $dni, "tel" => $tel, "correo" => $correo, "imagen" => $nombreImagen);
+    }
 
-
-
+    
     file_put_contents("clientes.json", json_encode($aClientes));
 }
 
@@ -91,7 +118,7 @@ if($_POST){
                     <input class = "form-control" type="email" name = "txtCorreo" id = "txtCorreo" required value = "<?php echo isset($_GET["id"]) && isset($aClientes[$_GET["id"]])? $aClientes[$_GET["id"]]["correo"] : "" ?>">
                     
                     <h5 class = "mt-2">Archivo adjunto:</h5>
-                    <input class = "d-block" type="file" name = "archivo" id = "archivo" required>
+                    <input class = "d-block" type="file" name = "archivo" id = "archivo">
 
                     <button class = "mt-3 btn btn-info" type = "submit">Guardar<i class="fas fa-save ml-2"></i></i></button>
                 
