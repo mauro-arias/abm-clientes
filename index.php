@@ -145,21 +145,8 @@ if($_POST){
 
                 </tr>
                 
-                <tr>
-
-                    <td> <img class = "img-thumbnail" src="img/logo.png" alt="logo"> </td>
-                    <td>43607608</td>
-                    <td>MAURO ARIAS CHARRAS</td>
-                    <td>mauroacharras@hotmail.com</td>
-                    <td><button class = "btn btn-sm btn-secondary"><i class="fas fa-edit"></i></button></td>
-                    <td><button class = "btn btn-sm btn-danger"><i class='fas fa-trash'></button></td>                
-
-                </tr> 
 
                 <?php if(empty($aClientes) == FALSE) { ?>
-
-                        
-                    
 
                     <?php foreach($aClientes as $key => $cliente) { ?>
 
